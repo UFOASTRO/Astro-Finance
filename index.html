@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Astro|Finance</title>
+  <link rel="stylesheet" href="styles/home.css">
+  <link rel="shortcut icon" href="images/favicon-32x32.png" type="image/x-icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Shojumaru&display=swap"
+    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&family=Sofadi+One&display=swap"
+    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Sofadi+One&display=swap" rel="stylesheet">
+
+  <script src='https://kit.fontawesome.com/668ebba5a9.js' crossorigin='anonymous'></script>
+</head>
+
+<body>
+  <div class="loader"></div>
+  <div class="main-container" id="main-container">
+    <div class="Transaction-succesful" id="Transaction-succesful">
+      <img src="./images/icon-success-check.svg" alt="">
+      <h3>Transaction successful</h3>
+    </div>
+    <div id="cursorbg"></div>
+    <div id="transferTab">
+      <form class="transfer-form" Id="transfer-form">
+        <i class="fa-solid fa-xmark  x-mark"></i>
+        <h2>Transfer Money</h2>
+        <div class="form-group">
+          <label for="recipient">Recipient:</label>
+          <input type="text" id="recipient" placeholder="Enter recipient's account number" required>
+        </div>
+        <div class="form-group">
+          <label for="amount">Amount(₦):</label>
+          <input type="number" id="amountTransfer" placeholder="Enter amount" required>
+        </div>
+        <div class="form-group">
+          <label for="note">Note (optional):</label>
+          <select id="note" rows="3" placeholder="Enter a note...">
+            <option value=""><i class="fa-solid fa-kit-medical">Health</option>
+            <option value=""> <span><i class="fa-solid fa-cart-shopping"></i> Groceries</span></option>
+            <option value=""><i class="fa-solid fa-kit-medical">Shopping</option>
+          </select>
+        </div>
+        <button type="submit" class="transfer-button">Transfer</button>
+      </form>
+    </div>
+
+    <!-- <div class="enterPinPrompt"></div> -->
+
+    <div id="DepositTab">
+      <form class="deposit-form" id="deposit-form">
+        <i class="fa-solid fa-xmark  x-mark" id="HideDepositTab"></i>
+        <h2>Deposit Money</h2>
+        <div class="form-group">
+          <label for="crediter">CREDIT</label>
+          <input type="text" id="crediter" placeholder="1934-2345-6772-1223" readonly>
+        </div>
+        <div class="form-group">
+          <label for="amount">Amount(₦):</label>
+          <input type="number" id="amountDeposit" placeholder="Enter amount" required>
+        </div>
+        <div class="form-group">
+          <label for="amount">Name <label>
+              <input type="text" id="NameofCreditor" placeholder="Enter Name" required>
+        </div>
+        <button type="submit" class="deposit-button">Deposit</button>
+      </form>
+    </div>
+    <div class="container">
+      <div class="logo">
+        <img src="./images/Astro finance logo.png" alt="Logo" id="logoImg"><span id="logoTxt">Astro|<span
+            id="finance">Finance</span>
+      </div>
+      <div class="logout" id="logout"><span>LOGOUT</span></div>
+      <div class="header">
+        <!-- <div class="balance">
+          <p id="Balance">20,000</p>
+        </div> -->
+        <div class="welcome">
+          <h2>Welcome back <span id="name"></span></h2>
+        </div>
+        <div class="card" id="card">
+          <div id="Naira"><span id="accBalance"></span></div>
+          <p><span id="Logocrd">Astro|<span id="finance">Finance</span></p>
+          <img src="./images/Astro finance logo.png" alt="" id="card-logo">
+          <img src="./images/smartchip1.png" alt="" id="smartchip"> <img src="./images/signal.png" alt="" id="signal">
+          <pre id="accountnum">1934    2345    6772    1223</pre>
+          <p id="valid-thru">Valid Thru</p>
+          <p id="expDate">16/23</p>
+          <pre id="fullname">BELLO    OLUWANIFEMI</pre>
+          <p id="debit">DEBIT</p>
+          <img src="./images/VisaIncLogoPNGimage.png" alt="" id="visa-logo">
+        </div>
+      </div>
+      <button id="hidecardDetails" onclick="hidecardDetails()">HIDE</button>
+      <div class="footer">
+        <div class="actions">
+          <div class="accBalance">
+            <span>
+              <i class="fa-solid fa-money-bill" style="color: #600bcd;"></i>
+              Balance <span id="accBalance">20,000</span>
+            </span>
+          </div>
+          <div class="transfer" id="Transfershowbtn">
+            <span>Transfer <i class="fa-solid fa-right-left" style="color:  #600bcd;"></i></span>
+          </div>
+          <div class="deposit" id="depositshowbtn">
+            <span>Deposit <i class="fa-solid fa-plus" style="color:  #600bcd;"></i></span>
+          </div>
+        </div>
+        <div class="transaction-section">
+          <div class="transactionHistory">
+            <div class="transaction-header">
+              <h2>Recent Transactions</h2>
+            </div>
+            <div class="transaction-list">
+              <div class="transaction-item income">
+                <div class="transaction-details">
+
+                  <span class="transaction-date">Oct 12, 2024</span>
+                </div>
+                <div class="transactionSummary">
+                  <span><i class="fa-solid fa-plus"></i> Incoming</span>
+                </div>
+                <div class="transaction-amount">+$2,000</div>
+              </div>
+              <div class="transaction-item expense">
+                <div class="transaction-details">
+                  <span class="transaction-date">Oct 10, 2024</span>
+                </div>
+                <div class="transactionSummary">
+                  <span><i class="fa-solid fa-cart-shopping"></i> Groceries</span>
+                </div>
+                <div class="transaction-amount">-$150</div>
+              </div>
+              <div class="transaction-item expense">
+                <div class="transaction-details">
+                  <span id="tranName">SAMUEL OLA</span>
+                  <span class="transaction-date">Oct 5, 2024</span>
+                </div>
+                <div class="transactionSummary">
+                  <span><i class="fa-solid fa-kit-medical"></i> Health</span>
+                </div>
+                <div class="transaction-amount">-$100</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- login page  -->
+  <div class="login-signup" id="login-signup">
+    <div class="logo">
+      <img src="./images/Astro finance logo.png" alt="Logo" id="logoImg">
+      <span id="logoTxt">Astro|<span id="finance">Finance</span>
+    </div>
+
+    <div class="successful" id="Login-successful">
+      <img src="./images/icon-success-check.svg" alt="">
+      <h3>Sign in successful</h3>
+    </div>
+    <div class="unsuccessful" id="unsuccessful">
+      <img src="./images/cancel_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.svg" alt="">
+      <h3>Sign in unsuccessful</h3>
+    </div>
+    <div class="container" id="signIn">
+      <div class="slider">
+        <div class="images-container">
+          <img class="animation-item small-spaceship" id="small-spaceship-one" src="images/small-spaceship.jpg">
+          <img class="animation-item" id="rocket-img" src="images/rocket.png">
+          <img class="animation-item small-spaceship" id="small-spaceship-two" src="images/small-spaceship.jpg">
+        </div>
+        <p id="slider-text"> Launch into your journey to <br> financial empowerment with <span id="page-name">Astro
+            Finance</span>
+        </p>
+      </div>
+      <div class="content">
+        <div class="sign-in-up-btns">
+          <button id="sign-in-btn-switch" onclick="signIn()">Sign In</button>
+          <button id="sign-up-btn-switch" onclick="signUp()">Sign Up</button>
+        </div>
+
+        <p id="sign-in-up-title">Sign In</p>
+
+        <div class="sign-content">
+          <div class="input-fields">
+            <span id="email-invalid" class="validation"></span>
+            <input id="email-input-signIn" type="email" placeholder="Email">
+            <i class="fa-regular fa-envelope"></i>
+            <input id="password-input" type="password" placeholder="Password">
+            <i class="fa-solid fa-lock"></i>
+            <span id="password-invalid" class="validation"></span>
+          </div>
+        </div>
+        <button class="sign-in-up-btn" onclick="displayAccount()">Sign In <i class="fa-solid fa-arrow-right"></i></button>
+        <div class="icon-sign-in-up-container">
+          <button id="google-login-btn"><i class="fa-brands fa-google"></i></button>
+          <button id="twitter-login-btn"><i class="fa-brands fa-twitter"></i></button>
+          <button id="facebook-login-btn"><i class="fa-brands fa-facebook-f"></i></button>
+          <button id="github-login-btn"><i class="fa-brands fa-github"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sign Up -->
+    <div class="container" id="signUp">
+      <div class="slider">
+        <div class="images-container">
+          <img class="animation-item small-spaceship" id="small-spaceship-one" src="images/small-spaceship.jpg">
+          <img class="animation-item" id="rocket-img" src="images/rocket.png">
+          <img class="animation-item small-spaceship" id="small-spaceship-two" src="images/small-spaceship.jpg">
+        </div>
+        <p id="slider-text"> Launch into your journey to <br> financial empowerment with <span id="page-name">Astro
+            Finance</span>
+        </p>
+      </div>
+      <div class="content">
+        <div class="sign-in-up-btns">
+          <button id="sign-in-btn-switch" onclick="signIn()" style=" background: transparent;
+                background-color: rgba(255, 255, 255, 0.3);
+                backdrop-filter: blur(8px);">Sign In</button>
+          <button id="sign-up-btn-switch" style="background-color:rgb(31,37,70);">Sign Up</button>
+        </div>
+
+        <p id="sign-in-up-title">Sign Up</p>
+
+        <div class="sign-content">
+          <div class="input-fields">
+            <input id="email-input" type="email" placeholder="Email">
+            <i class="fa-regular fa-envelope"></i>
+            <span id="email-invalid-snUp" class="validation"></span>
+            <input id="username-signup-input" type="text" placeholder="Firstname">
+            <i class="fa-regular fa-user"></i>
+            <input id="lastname-input" type="text" placeholder="Lastname">
+            <i class="fa-regular fa-user"></i>
+            <span id="username-invalid-snUp" class="validation"></span>
+            <input id="password-signup-input" type="password" placeholder="Password">
+            <i class="fa-solid fa-lock"></i>
+            <span id="password-invalid-snUp" class="validation"></span>
+          </div>
+
+        </div>
+        <button class="sign-in-up-btn" onclick="addData()">Sign Up<i class="fa-solid fa-arrow-right"></i></button>
+      </div>
+    </div>
+  </div>
+  <script src="js/home.js"></script>
+  <script src="js/login.js"></script>
+</body>
+
+</html>
