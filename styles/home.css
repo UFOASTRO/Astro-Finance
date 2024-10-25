@@ -443,9 +443,7 @@ html,
 }
 
 .main-container {
-  /* background: url(../images/modern_sharp_abstract_shapes_background_purple.jpg); */
   background: var(--backgroundColor);
-  /* background: url(../images/9307194.png); */
   background-position: top;
   display: none;
   background-size: cover;
@@ -467,7 +465,7 @@ html,
   transition: 1.2s ease;
 }
 .logout:hover{
-  background-color: #600bcd;
+  border:solid  #600bcd;
   text-decoration: none;
 }
 #name {
@@ -480,10 +478,11 @@ html,
   left: 0;
   width: 100vw;
   height: 100vh;
-  display: none;
+  /* display: none; */
   justify-content: center;
   align-items: center;
-  background-color: var(--backgroundColor);
+  background-color: white;
+  backdrop-filter: blur(10px);
   z-index: 1000;
   transition: opacity 1.85s, visibility 1.85s;
 }
@@ -590,7 +589,7 @@ html,
   /* Add padding for better spacing */
 }
 
-.enterPinPrompt {
+.creditPrompt {
   width: 400px;
   height: 250px;
   z-index: 4;
@@ -600,8 +599,27 @@ html,
   background-color: white;
   position: absolute;
   border-radius: 10px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  color: #333;
+  font-weight: bold;
+  padding:5px;
+  line-height: 30px;
+  animation-name: creditPrompt;
+  animation-duration: 0.2s;
+  animation-fill-mode: backwards;
 }
-
+@keyframes creditPrompt {
+  from{
+  transform: scale3d(1.52);
+  }
+  to{
+    transform: scale3d(1);
+  }
+}
 /* Form Styles */
 .Transaction-succesful{
   background-color: green;
@@ -806,22 +824,7 @@ textarea:focus {
   font-weight:bold;
 }
 
-#hidecardDetails {
-  position: absolute;
-  top: 350px;
-  right: 40px;
-  padding: 20px;
-  background-color: red;
-  border: none;
-  border-radius: 10px;
-  width: 100px;
-  height: 40px;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  /* //change to eye icon// */
-}
+
 
 /* view(47px); */
 
@@ -883,7 +886,7 @@ textarea:focus {
   color: white;
   font-size: 17px;
   position: absolute;
-  left: 58px;
+  left: 65px;
   top: 186px;
   font-family: "Orbitron", sans-serif;
 }
@@ -1030,6 +1033,10 @@ textarea:focus {
 .transaction-item.expense .transaction-amount {
   color: #dc3545;
   /* Red for expenses */
+}
+.transaction-item.credit .transaction-amount {
+  color:  #28a745;
+  /* Green for positive amounts *//
 }
 
 .transaction-date {

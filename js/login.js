@@ -1,17 +1,9 @@
 let signUpPage = document.getElementById("signUp");
 let signInPage = document.getElementById("signIn");
 let userName = document.getElementById("username-signup-input").value.trim();
-
-// const emailInvalid = document.getElementById("email-invalid");
-// const usernameInvalid = document.getElementById("username-invalid");
-// const passwordInvalid = document.getElementById("password-invalid");
-
 let signupSwitch = document.getElementById("sign-up-btn-switch");
 let signInSwitch = document.getElementById("sign-in-btn-switch");
-
 let signInUpBtn = document.getElementById("sign-in-up-btn");
-// let transactionAmount = document.getElementsByClassName("transaction-amount")
-// transactionAmount.style.color="red"
 
 //store user information
 function Bank() {
@@ -35,7 +27,7 @@ Bank.prototype.findAccount = function (id) {
   return false;
 };
 
-function User(firstName, lastName, email, password) {
+function User(firstName, lastName, email, password, accountNumber) {
   this.firstName = firstName;
   this.lastName = lastName;
   this.password = password;
@@ -43,6 +35,7 @@ function User(firstName, lastName, email, password) {
   this.balance = 20000;
   this.transactions = {};
   this.transactionId = 0;
+  this.accountNumber = accountNumber;
 }
 
 User.prototype.fullName = function () {
@@ -68,39 +61,66 @@ User.prototype.addTransaction = function (
 
   // Store the transaction using the transactionId as the key
   this.transactions[this.transactionId] = transaction;
+
+  return transaction;
 };
 
-User.prototype.findtransaction = function (id) {
-  if (this.transactions[id] !== undefined) {
-    return this.transactions[id];
-  }
-  return false;
-};
+// User.prototype.findtransaction = function (id) {
+//   if (this.transactions[id] !== undefined) {
+//     return this.transactions[id];
+//   }
+//   return false;
+// };
+
 function SigInSuccess() {
   let HomePage = document.getElementById("main-container");
   let LoginPage = document.getElementById("login-signup");
-
+  load();
   setTimeout(() => {
     LoginPage.style.display = "none";
     HomePage.style.display = "block";
+    CreitedPrompt();
   }, 2000);
 }
 
+
+// displays all information  abot a user on the home page
 function showAccount(Userid) {
   const account = bankAccount.findAccount(Userid);
   if (!account) {
-    console.error("Account not found.");
+    window.alert("Account not found.");
     return;
   }
+
   let AccountBalance = document.getElementById("accBalance");
   let fullnameDisplay = document.getElementById("fullname");
   let Template = document.getElementById("name");
+  let accountNumberElement = document.getElementById("accountnum");
 
   Template.textContent = account.firstName.toUpperCase();
   fullnameDisplay.textContent = account.fullName().toUpperCase();
 
+  const DisplayedaccountNumber = `${account.accountNumber}`; // Use 'const' for proper scoping
+
+  function formatAccountNumber(accountStr) {
+    // Add space between each digit
+    let spacedDigits = accountStr.split("").join(" ");
+
+    // Add four spaces after every four characters
+    let formatted = spacedDigits.replace(/((?:\S+\s+){4})/g, "$1    ");
+
+    return formatted.trim(); // Trim to remove any trailing spaces
+  }
+
+  const formattedAccountNumber = formatAccountNumber(DisplayedaccountNumber);
+  accountNumberElement.textContent = formattedAccountNumber; // Update the correct element
+
   AccountBalance.textContent = `₦${account.balance.toLocaleString()}`;
+
+
+
 }
+
 // Variable to store the currently logged-in user's ID
 let currentUserId = null;
 
@@ -117,7 +137,8 @@ function displayAccount() {
       LoginSuccessAnimate();
       SigInSuccess();
       // loading()
-    } else {
+    }
+    else {
       let LoginFailure = document.getElementById("unsuccessful");
       LoginFailure.style.display = "flex";
       setTimeout(() => {
@@ -126,7 +147,7 @@ function displayAccount() {
     }
   });
 }
-
+// create a new bank object 
 let bankAccount = new Bank();
 
 console.log(bankAccount);
@@ -171,6 +192,14 @@ function validate() {
     emailInvalidSnUp.textContent = "";
   }
 
+  for (const account of Object.values(bankAccount.Users)) {
+    if (account.email.toLowerCase() === userEmail.toLowerCase()) {
+      document.getElementById("email-invalid-snUp").textContent =
+        "Email address already exists";
+      return false;
+    }
+  }
+
   // username validation
   if (userNameInput == "" || userNameInput == null) {
     usernameInvalidSnUp.textContent = "Please input a valid username";
@@ -185,7 +214,7 @@ function validate() {
     return false;
   }
   if (passwordInput.length < 8) {
-    passwordInvalidSnUp.textContent = "";
+    passwordInvalidSnUp.textContent = "Password must be at least 8 characters long";
     return false;
   } else {
     passwordInvalidSnUp.textContent = "";
@@ -193,7 +222,10 @@ function validate() {
 
   return true;
 }
-
+function generateAccountNumber() {
+  let accountNumber = Math.floor(Math.random() * 100000000000) + 100000000000;
+  return accountNumber;
+}
 // adds inputed data on the signup form to the local storage
 function addData() {
   if (validate()) {
@@ -210,7 +242,8 @@ function addData() {
       userNameInput,
       LastnameInput,
       userEmail,
-      passwordInput
+      passwordInput,
+      generateAccountNumber()
     );
 
     bankAccount.AddUser(newUser);
@@ -219,6 +252,7 @@ function addData() {
 
     showAccount(newUser.id);
     signIn();
+    load();
   }
 }
 
@@ -228,7 +262,9 @@ function LoginSuccessAnimate() {
   LoginSuccess.style.display = "flex";
   setTimeout(() => {
     LoginSuccess.style.display = "none";
+    // Call the transfer function with the current user ID
     transfer(currentUserId);
+    // Call the deposit function with the current user ID
     deposit(currentUserId);
   }, 2000);
 }
@@ -247,7 +283,6 @@ function transfer(Userid) {
     event.preventDefault();
 
     const account = bankAccount.findAccount(Userid);
-
     let currentBalance = account.balance;
     let recipientInput = document.getElementById("recipient").value.trim();
     let amountTransfer = parseFloat(
@@ -279,16 +314,44 @@ function transfer(Userid) {
     let AccountBalance = document.getElementById("accBalance");
     AccountBalance.textContent = `₦${account.balance.toLocaleString()}`;
 
+    // Add transaction to account's transaction history
+    const transaction = account.addTransaction(
+      recipientInput,
+      "Transfer",
+      amountTransfer,
+      "debit"
+    );
+
+    // Create a new transaction item element
+
+    const transactionList = document.querySelector(".transaction-list");
+    const newTransactionItem = document.createElement("div");
+    newTransactionItem.classList.add("transaction-item", "expense");
+    newTransactionItem.innerHTML = `
+      <div class="transaction-details">
+        <span class="transaction-date">${new Date().toDateString()}</span>
+      </div>
+      <div class="transactionSummary">
+        <span><i class="fa-solid fa-arrow-right"></i> ${transaction.event
+      }</span>
+      </div>
+      <div class="transaction-amount">-₦${transaction.amount.toLocaleString()}</div>
+    `;
+
+    // Append the new transaction item to the transaction list
+    transactionList.prepend(newTransactionItem); // Use prepend to add it at the top
+
     // Show success message and clear the form
     TransactionSucess();
     setTimeout(() => {
       transferTab.style.display = "none";
-      clearForm(recipientInput, amountTransfer); // Clear the form inputs
+      clearForm(
+        document.getElementById("recipient"),
+        document.getElementById("amountTransfer")
+      ); // Clear the form inputs
     }, 2000);
   });
 }
-
-// Call the transfer function with the current user ID
 
 function deposit(Userid) {
   const depositForm = document.getElementById("deposit-form");
@@ -297,8 +360,8 @@ function deposit(Userid) {
     event.preventDefault();
 
     const account = bankAccount.findAccount(Userid);
-
-   let DepositTab = document.getElementById("DepositTab");
+    let NameofCreditor = document.getElementById("NameofCreditor").value;
+    let DepositTab = document.getElementById("DepositTab");
     let amountDeposit = parseFloat(
       document.getElementById("amountDeposit").value
     );
@@ -315,10 +378,36 @@ function deposit(Userid) {
 
     AccountBalance.textContent = `₦${account.balance.toLocaleString()}`;
 
+    const addTransaction = account.addTransaction(
+      "notavailable",
+      "DEPOSIT",
+      amountDeposit,
+      "credit"
+    );
+    // add to transaction history
+    const transactionHistory = document.querySelector(".transaction-list");
+    const newTransactionItem = document.createElement("div");
+    newTransactionItem.classList.add("transaction-item", "credit");
+    newTransactionItem.innerHTML = `
+               <div class="transaction-details">
+                  <span class="transaction-date">${new Date().toDateString()}</span>
+                </div>
+                <div class="transactionSummary">
+                  <span><i class="fa-solid fa-plus"></i> Deposit</span>
+                </div>
+                <div class="transaction-amount" style="color="green">+₦${addTransaction.amount.toLocaleString()}
+                </div> 
+   `;
+    // add new transactionItem to TransactionHistory
+    transactionHistory.prepend(newTransactionItem);
     // Show success message and clear the form
     TransactionSucess();
     setTimeout(() => {
       DepositTab.style.display = "none";
+      clearForm(
+        document.getElementById("amountDeposit"),
+        document.getElementById("NameofCreditor")
+      );
     }, 2000);
   });
 }
